@@ -1,0 +1,96 @@
+blueprint:
+  name: Sonoff R5 button actions
+  description: Actions for a specific Sonoff R5 button (Requires the R5 to be added using the "Sonoff LAN" HACS integration, in auto mode, will not work with local only. https://github.com/AlexxIT/SonoffLAN)
+  domain: automation
+  author: Erick Rodriguez
+  input:
+    sonoff_r5_entity:
+      name: R5 entity
+      description: Select the R5 entity.
+      selector:
+        entity:
+          domain: sensor
+          integration: sonoff
+    r5_button_name:
+      name: R5 Button
+      description: Select the R5 button that will trigger the automation.
+      selector:
+        select:
+          mode: dropdown
+          options:
+            - label: Button 1
+              value: button_1
+            - label: Button 2
+              value: button_2
+            - label: Button 3
+              value: button_3
+            - label: Button 4
+              value: button_4
+            - label: Button 5
+              value: button_5
+            - label: Button 6
+              value: button_6
+    press_action:
+      name: Press Action
+      description: Action to perform when single pressing the selected button.
+      default: []
+      selector:
+        action: {}
+    double_press_action:
+      name: Double Press Action
+      description: Action to perform when double pressing the selected button.
+      default: []
+      selector:
+        action: {}
+    hold_action:
+      name: Hold Action
+      description: Action to perform when hold pressing the selected button (this will trigger the action multiple times until the button is released).
+      default: []
+      selector:
+        action: {}
+    automation_mode:
+      name: Automation mode
+      description: Select the R5 button automation mode (https://www.home-assistant.io/docs/automation/modes/).
+      default: queued
+      selector:
+        select:
+          mode: list
+          options:
+            - queued
+            - single
+            - restart
+            - parallel
+
+variables:
+  sonoff_r5_entity: !input 'sonoff_r5_entity'
+  r5_button_name: !input r5_button_name
+  single_trigger_state: "{{ r5_button_name }}_single"
+  double_trigger_state: "{{ r5_button_name }}_double"
+  hold_trigger_state: "{{ r5_button_name }}_hold"
+  event_state: "{{ trigger.event.data.new_state.state }}"
+  press_action: !input 'press_action'
+  double_press_action: !input 'double_press_action'
+  hold_action: !input 'hold_action'
+
+trigger:
+- platform: event
+  event_type: state_changed
+  event_data:
+    entity_id: !input 'sonoff_r5_entity'
+
+action:
+- choose:
+  - conditions:
+    - condition: template
+      value_template: "{{ single_trigger_state == event_state }}"
+    sequence: !input 'press_action'
+  - conditions:
+    - condition: template
+      value_template: "{{ double_trigger_state == event_state }}"
+    sequence: !input 'double_press_action'
+  - conditions:
+    - condition: template
+      value_template: "{{ hold_trigger_state == event_state }}"
+    sequence: !input 'hold_action'
+
+mode: !input automation_mode
