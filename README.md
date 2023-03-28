@@ -21,4 +21,4 @@ Once your R5 is linked to your "Bridge" device, it should show in the HACS sonof
 
 If the above button does not work, you can manually add the blueprint. 
 
-Download the yaml file [sonoff_switchman_r5.yaml](https://raw.githubusercontent.com/erodriguezv/blueprints/main/sonoff_switchman_r5.yaml) and put it in your home assistant "config/blueprints/automation/homeassistant" folder.
+Download the yaml file [sonoff_switchman_r5.yaml](https://raw.githubusercontent.com/erodriguezv/blueprints/main/sonoff_switchman_r5.yaml) and put it in your home assistant "config/blueprints/automation" folder (you may also create a folder under it and put the yaml there).
