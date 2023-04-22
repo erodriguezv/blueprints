@@ -1,0 +1,227 @@
+blueprint:
+  name: Sonoff R5 all buttons actions
+  description: Actions for a all Sonoff R5 buttons (Requires the R5 to be added using the "Sonoff LAN" HACS integration, in auto mode, will not work with local only. https://github.com/AlexxIT/SonoffLAN)
+  domain: automation
+  author: Erick Rodriguez
+  input:
+    sonoff_r5_entity:
+      name: R5 entity
+      description: Select the R5 entity.
+      selector:
+        entity:
+          domain: sensor
+          integration: sonoff
+    automation_mode:
+      name: Automation mode
+      description: Sadly only one automation mode can be used for all buttons. Select the R5 button automation mode (https://www.home-assistant.io/docs/automation/modes/).
+      default: queued
+      selector:
+        select:
+          mode: dropdown
+          options:
+            - queued
+            - single
+            - restart
+            - parallel
+    1_press_action:
+      name: Button 1 Press Action
+      description: Action to perform when single pressing the selected button.
+      default: []
+      selector:
+        action: {}
+    1_double_press_action:
+      name: Button 1 Double Press Action
+      description: Action to perform when double pressing the selected button.
+      default: []
+      selector:
+        action: {}
+    1_hold_action:
+      name: Button 1 Hold Action
+      description: Action to perform when hold pressing the selected button (this will trigger the action multiple times until the button is released).
+      default: []
+      selector:
+        action: {}
+    2_press_action:
+      name: Button 2 Press Action
+      description: Action to perform when single pressing the selected button.
+      default: []
+      selector:
+        action: {}
+    2_double_press_action:
+      name: Button 2 Double Press Action
+      description: Action to perform when double pressing the selected button.
+      default: []
+      selector:
+        action: {}
+    2_hold_action:
+      name: Button 2 Hold Action
+      description: Action to perform when hold pressing the selected button (this will trigger the action multiple times until the button is released).
+      default: []
+      selector:
+        action: {}
+    3_press_action:
+      name: Button 3 Press Action
+      description: Action to perform when single pressing the selected button.
+      default: []
+      selector:
+        action: {}
+    3_double_press_action:
+      name: Button 3 Double Press Action
+      description: Action to perform when double pressing the selected button.
+      default: []
+      selector:
+        action: {}
+    3_hold_action:
+      name: Button 3 Hold Action
+      description: Action to perform when hold pressing the selected button (this will trigger the action multiple times until the button is released).
+      default: []
+      selector:
+        action: {}
+    4_press_action:
+      name: Button 4 Press Action
+      description: Action to perform when single pressing the selected button.
+      default: []
+      selector:
+        action: {}
+    4_double_press_action:
+      name: Button 4 Double Press Action
+      description: Action to perform when double pressing the selected button.
+      default: []
+      selector:
+        action: {}
+    4_hold_action:
+      name: Button 4 Hold Action
+      description: Action to perform when hold pressing the selected button (this will trigger the action multiple times until the button is released).
+      default: []
+      selector:
+        action: {}
+    5_press_action:
+      name: Button 5 Press Action
+      description: Action to perform when single pressing the selected button.
+      default: []
+      selector:
+        action: {}
+    5_double_press_action:
+      name: Double Press Action
+      description: Action to perform when double pressing the selected button.
+      default: []
+      selector:
+        action: {}
+    5_hold_action:
+      name: Button 5 Hold Action
+      description: Action to perform when hold pressing the selected button (this will trigger the action multiple times until the button is released).
+      default: []
+      selector:
+        action: {}
+    6_press_action:
+      name: Button 6 Press Action
+      description: Action to perform when single pressing the selected button.
+      default: []
+      selector:
+        action: {}
+    6_double_press_action:
+      name: Button 6 Double Press Action
+      description: Action to perform when double pressing the selected button.
+      default: []
+      selector:
+        action: {}
+    6_hold_action:
+      name: Button 6 Hold Action
+      description: Action to perform when hold pressing the selected button (this will trigger the action multiple times until the button is released).
+      default: []
+      selector:
+        action: {}
+
+variables:
+  sonoff_r5_entity: !input 'sonoff_r5_entity'
+  event_state: "{{ trigger.event.data.new_state.state }}"
+
+trigger:
+- platform: event
+  event_type: state_changed
+  event_data:
+    entity_id: !input 'sonoff_r5_entity'
+
+# value_template cannot use inputs, it needs inputs as variables,
+action:
+- choose:
+
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_1_single' == event_state }}"
+    sequence: !input '1_press_action'
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_1_double' == event_state }}"
+    sequence: !input '1_double_press_action'
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_1_hold' == event_state }}"
+    sequence: !input '1_hold_action'
+
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_2_single' == event_state }}"
+    sequence: !input '2_press_action'
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_2_double' == event_state }}"
+    sequence: !input '2_double_press_action'
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_2_hold' == event_state }}"
+    sequence: !input '2_hold_action'
+
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_3_single' == event_state }}"
+    sequence: !input '3_press_action'
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_3_double' == event_state }}"
+    sequence: !input '3_double_press_action'
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_3_hold' == event_state }}"
+    sequence: !input '3_hold_action'
+
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_4_single' == event_state }}"
+    sequence: !input '4_press_action'
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_4_double' == event_state }}"
+    sequence: !input '4_double_press_action'
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_4_hold' == event_state }}"
+    sequence: !input '4_hold_action'
+
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_5_single' == event_state }}"
+    sequence: !input '5_press_action'
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_5_double' == event_state }}"
+    sequence: !input '5_double_press_action'
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_5_hold' == event_state }}"
+    sequence: !input '5_hold_action'
+
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_6_single' == event_state }}"
+    sequence: !input '6_press_action'
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_6_double' == event_state }}"
+    sequence: !input '6_double_press_action'
+  - conditions:
+    - condition: template
+      value_template: "{{ 'button_6_hold' == event_state }}"
+    sequence: !input '6_hold_action'
+
+mode: !input automation_mode
